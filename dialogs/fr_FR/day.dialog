@@ -1,0 +1,3 @@
+Nous somme le {{ day }}
+On est le {{ day }}
+{{ day }}

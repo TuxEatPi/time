@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<project xmlns:nuance="https://developer.nuance.com/mix/nlu/trsx" xml:lang="en-US" nuance:version="2.0">
+  <ontology base="http://developer.nuance.com/mix/nlu/trsx/ontology-1.0">
+    <intents>
+      <intent name="time__time"/>
+      <intent name="time__day"/>
+    </intents>
+  </ontology>
+  <dictionaries>
+  </dictionaries>
+  <samples>
+    <sample intentref="time__time">
+      What time is it ?
+    </sample>
+    <sample intentref="time__time">
+      May I have the time ?
+    </sample>
+    <sample intentref="time__day">
+      What day are we today ?
+    </sample>
+  </samples>
+</project>

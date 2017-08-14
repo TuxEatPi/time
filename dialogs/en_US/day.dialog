@@ -1,0 +1,2 @@
+{{ day }}
+Today, we are {{ day }}
