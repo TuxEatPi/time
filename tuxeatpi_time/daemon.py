@@ -13,8 +13,8 @@ from tuxeatpi_common.daemon import TepBaseDaemon
 class Time(TepBaseDaemon):
     """Component giving time and day"""
 
-    def __init__(self, daemon, name, intent_folder, dialog_folder, logging_level=logging.INFO):
-        TepBaseDaemon.__init__(self, daemon, name, intent_folder, dialog_folder, logging_level)
+    def __init__(self, name, workdir, intent_folder, dialog_folder, logging_level=logging.INFO):
+        TepBaseDaemon.__init__(self, name, workdir, intent_folder, dialog_folder, logging_level)
 
     def main_loop(self):
         time.sleep(1)
@@ -48,7 +48,7 @@ class Time(TepBaseDaemon):
         day_format = locale.nl_langinfo(locale.D_FMT)
         today_fmt = datetime.datetime.now().strftime(day_format)
         # Get dialog
-        dialog = self.get_dialog("day", time=today_fmt)
+        dialog = self.get_dialog("day", day=today_fmt)
         # Prepare message
         data = {"arguments": {"text": dialog}}
         topic = "speak/say"

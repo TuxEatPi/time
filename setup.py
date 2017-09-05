@@ -34,13 +34,13 @@ setup(
     author="TuxEatPi Team",
     # TODO create team mail
     author_email='titilambert@gmail.com',
-    url="https://github.com/TuxEatPi/tuxeatpi",
-    download_url="https://github.com/TuxEatPi/tuxeatpi/archive/0.0.1.tar.gz",
+    url="https://github.com/TuxEatPi/time",
+    download_url="https://github.com/TuxEatPi/time/archive/0.0.1.tar.gz",
     package_data={'': ['LICENSE.txt', 'intends', 'dialogs']},
     package_dir={'tuxeatpi_time': 'tuxeatpi_time'},
     entry_points={
         'console_scripts': [
-            'teptime = tuxeatpi_time.common:cli'
+            'tep-time = tuxeatpi_time.common:cli'
         ]
     },
     include_package_data=True,

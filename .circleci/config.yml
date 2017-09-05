@@ -1,9 +1,31 @@
+# Workflow
+workflows:
+  version: 2
+  test__dockerhub:
+    jobs:
+      - test
+      - build_docker_latest:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
+            tags:
+                only: /.*/
+# Tasks
 version: 2
 jobs:
-  build:
+  # Tests
+  test:
     docker:
       - image: circleci/python:3.6.1
       - image: eclipse-mosquitto:latest
+      - image: quay.io/coreos/etcd
+        command:
+        - /usr/local/bin/etcd
+        - --data-dir=/etcd-data
+        - --listen-client-urls=http://0.0.0.0:2379
+        - --advertise-client-urls=http://127.0.0.1:2379
     working_directory: ~/repo
     steps:
       - checkout
@@ -18,7 +40,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install -r requirements.txt --upgrade
+            pip install --exists-action s -r requirements.txt --upgrade --force
             pip install -r test_requirements.txt --upgrade
             pip install codeclimate-test-reporter
       - save_cache:
@@ -42,3 +64,17 @@ jobs:
       # Useless for now waiting for update from circleCI UI
       - store_test_results:
           path: pytest/
+  # Trigger dockerhub
+  build_docker_latest:
+    docker:
+      - image: docker:17.05.0-ce-git
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Push to Docker Hub
+          command: |
+            docker build -t tuxeatpi/time:latest -f Dockerfile .
+            docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
+            docker push tuxeatpi/time:latest

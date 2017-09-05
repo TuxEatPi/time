@@ -1,8 +1,8 @@
 import os
 import json
 import time
+import threading
 
-import daemonocle
 import pytest
 
 from tuxeatpi_common.cli import main_cli, set_daemon_class
@@ -17,17 +17,11 @@ class TestMQTT(object):
 
     @classmethod
     def setup_class(self):
-        intent_folder = os.path.join(os.getcwd(), 'intents')
-        dialog_folder = os.path.join(os.getcwd(), 'dialogs')
-        if not os.path.exists(intent_folder):
-           os.makedirs(intent_folder)
-        if not os.path.exists(dialog_folder):
-           os.makedirs(dialog_folder)
-        daemon = daemonocle.Daemon()
-        self.time_daemon = Time(daemon, 'timedaemon', intent_folder, dialog_folder)
-        self.time_daemon.dialog_handler.load()
-        self.time_daemon._mqtt_client.run()
-        self.time_daemon.language = "en_US"
+        workdir = "tests/workdir"
+        intents = "intents"
+        dialogs = "dialogs"
+        self.time_daemon = Time('time_test', workdir, intents, dialogs)
+        self.time_daemon.settings.language = "en_US"
         self.message = None
 
         def get_message(mqttc, obj, msg):
@@ -41,17 +35,33 @@ class TestMQTT(object):
 
     @classmethod
     def teardown_class(self):
-       self.message = None
-       self.mqtt_client.loop_stop()
+        self.message = None
+        self.time_daemon.settings.delete("/config/global")
+        self.time_daemon.settings.delete("/config/time_test")
+        self.time_daemon.settings.delete()
+        self.time_daemon.registry.clear()
+        try:  # CircleCI specific
+            self.time_daemon.shutdown()
+        except AttributeError:
+            pass
 
     @pytest.mark.order1
     def test_time(self, capsys):
-        self.time_daemon.time_()
-        time.sleep(3)
-        assert self.message.get("text") is not None
+        t = threading.Thread(target=self.time_daemon.start)
+        t = t.start()
 
-    @pytest.mark.order2
-    def test_day(self, capsys):
+        time.sleep(1)
+        global_config = {"language": "en_US",
+                         "nlu_engine": "fake_nlu",
+                         }
+        self.time_daemon.settings.save(global_config, "global")
+        config = {"time": None}
+        self.time_daemon.settings.save(config)
+        self.time_daemon.set_config(config)
+
+        self.time_daemon.time_()
+        time.sleep(1)
+        assert self.message.get("text") is not None
+        time.sleep(1)
         self.time_daemon.day()
-        time.sleep(3)
         assert self.message.get("text") is not None

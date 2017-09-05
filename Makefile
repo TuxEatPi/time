@@ -2,12 +2,21 @@
 ### Dev targets
 #######################################
 dev-dep:
-	sudo apt-get install python3-virtualenv python3-pil.imagetk python3-tk libspeex-dev swig libpulse-dev libspeexdsp-dev portaudio19-dev
+	sudo apt-get install python3-virtualenv
 
 dev-pyenv:
 	virtualenv -p /usr/bin/python3 env
 	env/bin/pip3 install -r requirements.txt --upgrade --force-reinstall
 	env/bin/python setup.py develop
+
+#######################################
+### Docker
+#######################################
+docker_build:
+	docker build -t tuxeatpi_time -f Dockerfile .
+
+docker_run:
+	docker run --rm tuxeatpi_time
 
 #######################################
 ### Documentation
