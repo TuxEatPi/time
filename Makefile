@@ -33,7 +33,7 @@ doc-generate:
 ### Test targets
 #######################################
 
-test-run: test-syntax test-unit
+test-run: test-syntax test-pytest
 
 test-syntax:
 	env/bin/pycodestyle --max-line-length=100 tuxeatpi_time

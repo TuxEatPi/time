@@ -13,7 +13,7 @@ import paho.mqtt.client as paho
 
 from click.testing import CliRunner
 
-class TestMQTT(object):
+class TestTime(object):
 
     @classmethod
     def setup_class(self):
@@ -55,7 +55,7 @@ class TestMQTT(object):
                          "nlu_engine": "fake_nlu",
                          }
         self.time_daemon.settings.save(global_config, "global")
-        config = {"time": None}
+        config = {}
         self.time_daemon.settings.save(config)
         self.time_daemon.set_config(config)
 
