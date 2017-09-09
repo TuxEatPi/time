@@ -16,7 +16,7 @@ docker_build:
 	docker build -t tuxeatpi_time -f Dockerfile .
 
 docker_run:
-	docker run --rm tuxeatpi_time
+	docker run --rm -v /etc/localtime:/etc/localtime:ro -v /etc/timezone:/etc/timezone:ro tuxeatpi_time
 
 #######################################
 ### Documentation
