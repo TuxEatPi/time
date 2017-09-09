@@ -30,7 +30,7 @@ class TestTime(object):
         self.mqtt_client = paho.Client()
         self.mqtt_client.connect("127.0.0.1", 1883, 60)
         self.mqtt_client.on_message = get_message
-        self.mqtt_client.subscribe("speak/say", 0)
+        self.mqtt_client.subscribe("speech/say", 0)
         self.mqtt_client.loop_start()
 
     @classmethod

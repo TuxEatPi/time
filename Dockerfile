@@ -1,6 +1,5 @@
 FROM python:3.5-alpine
 
-#RUN apk add --no-cache git gcc python-dev linux-headers musl-dev
 RUN apk add --no-cache git gcc python-dev musl-dev
 
 WORKDIR /opt

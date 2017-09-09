@@ -35,7 +35,7 @@ class Time(TepBaseDaemon):
         dialog = self.get_dialog("time", time=now_fmt)
         # Prepare message
         data = {"arguments": {"text": dialog}}
-        topic = "speak/say"
+        topic = "speech/say"
         message = Message(topic=topic, data=data)
         # Send message
         self.publish(message)
@@ -51,7 +51,7 @@ class Time(TepBaseDaemon):
         dialog = self.get_dialog("day", day=today_fmt)
         # Prepare message
         data = {"arguments": {"text": dialog}}
-        topic = "speak/say"
+        topic = "speech/say"
         message = Message(topic=topic, data=data)
         # Send message
         self.publish(message)
