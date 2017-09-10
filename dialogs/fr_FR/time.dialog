@@ -1,2 +1,3 @@
+Il est {{ hour }} heure {{ minute }}
 Il est {{ time }}
 {{ time }}

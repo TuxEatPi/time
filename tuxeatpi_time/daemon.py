@@ -30,9 +30,11 @@ class Time(TepBaseDaemon):
         self.logger.info("time/time called")
         # Get time format
         time_format = locale.nl_langinfo(locale.T_FMT)
-        now_fmt = datetime.datetime.now().strftime(time_format)
+        now = datetime.datetime.now()
+        now_fmt = now.strftime(time_format)
         # Get dialog
-        dialog = self.get_dialog("time", time=now_fmt)
+        dialog = self.get_dialog("time", time=now_fmt, hour=now.hour,
+                                 minute=now.minute, second=now.second)
         # Prepare message
         data = {"arguments": {"text": dialog}}
         topic = "speech/say"
