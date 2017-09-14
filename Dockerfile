@@ -1,22 +1,17 @@
-FROM python:3.5-alpine
-
-RUN apk add --no-cache git gcc python-dev musl-dev
-
-WORKDIR /opt
-COPY requirements.txt /opt/requirements.txt
-COPY test_requirements.txt /opt/test_requirements.txt
-RUN pip install -r /opt/requirements.txt
-
-RUN mkdir -p /workdir
-
-COPY setup.py /opt/setup.py
-COPY tuxeatpi_time /opt/tuxeatpi_time
-
-RUN python /opt/setup.py install
-
+FROM tuxeatpi/common
+  
 COPY dialogs /dialogs
 COPY intents /intents
 
-WORKDIR /workdir
+COPY test_requirements.txt /opt/test_requirements.txt
+COPY requirements.txt /opt/requirements.txt
 
-ENTRYPOINT ["tep-time", "-w", "/workdir", "-I", "/intents", "-D", "/dialogs"]
+RUN sed -i 's/.*python-aio-etcd.*//' /opt/requirements.txt && \
+    sed -i 's/.*tuxeatpi-common.*//' /opt/requirements.txt
+
+COPY setup.py /opt/setup.py
+COPY tuxeatpi_time /opt/tuxeatpi_time
+RUN cd /opt && python /opt/setup.py install
+
+CMD ["time"]
+
